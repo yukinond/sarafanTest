@@ -6,7 +6,7 @@ import { email, helpers, minLength, required } from '@vuelidate/validators'
 const store = useMainStore()
 
 definePageMeta({
-  colorMode: 'dark',
+  colorMode: 'light',
   auth: {
     unauthenticatedOnly: false,
     navigateAuthenticatedTo: '/buyouts',
@@ -34,7 +34,7 @@ async function login() {
   loading.value = true
   const { error, url } = await signIn('credentials', {
     redirect: false,
-    callbackUrl: '/buyouts',
+    callbackUrl: '/',
     ...formData,
   })
   if (error) {
@@ -132,9 +132,9 @@ onMounted(() => {
 
 <template>
   <div id="auth" class="flex sm:items-center sm:justify-center h-screen">
-    <Toast :type="alertType" style="z-index: 1000" :active="alert">
+    <!-- <Toast :type="alertType" style="z-index: 1000" :active="alert">
       {{ alertText }}
-    </Toast>
+    </Toast> -->
 
     <section
       class="flex flex-col justify-center align-center w-full max-w-md lg:max-w-lg rounded-lg p-4 shadow-lg gap-3"
