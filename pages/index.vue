@@ -1,0 +1,34 @@
+<script lang="ts" setup>
+const { signIn } = useAuth()
+
+definePageMeta({ auth: false })
+navigateTo('/main', {
+  external: true,
+})
+</script>
+
+<template>
+  <section>
+    <div class="md:h-screen lg:py-0">
+      <div class="navbar bg-base-100 px-8">
+        <div class="flex-1">
+          <Logo />
+        </div>
+        <div class="navbar-end flex gap-4">
+          <NuxtLink :external="true" to="/auth" class="primary text-sm">
+            Вход
+          </NuxtLink>
+          <NuxtLink
+            :external="true"
+            to="/register"
+            class="btn btn-primary btn-sm font-medium normal-case text-white"
+          >
+            Регистрация
+          </NuxtLink>
+        </div>
+      </div>
+    </div>
+  </section>
+</template>
+
+<style scoped></style>
