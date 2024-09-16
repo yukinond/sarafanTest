@@ -109,7 +109,7 @@ if (!pageData) {
         </div>
 
         <NuxtLink
-          v-if="store.client.username !== 'admin'"
+          v-if="store.client.role == 'admin'"
           :to="`/menu/${route.params.path}/add`"
           class="w-full col-span-2 sm:col-span-2 text-center btn btn-ghost hover:bg-red-600 hover:text-white bg-transparent text-base-content border-red-600 border"
           >Добавить блюдо</NuxtLink
@@ -133,7 +133,7 @@ if (!pageData) {
               >
               </NuxtLink>
               <NuxtLink
-                v-if="store.client.username !== 'admin'"
+                v-if="store.client.role == 'admin'"
                 class="btn btn-sm btn-ghost absolute top-2 right-2 rounded-full p-1 text-primary transition-transform duration-200 ease-in-out transform hover:scale-110"
                 :to="`/menu/${route.params.path}/edit?uuid=${buyout.uuid}`"
               >

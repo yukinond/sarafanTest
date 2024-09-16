@@ -55,13 +55,13 @@ menu.value = menuStore.menu
         class="cards grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-2 w-full "
       >
         <NuxtLink
-          v-if="store.client.username !== 'admin'"
+          v-if="store.client.role == 'admin'"
           :to="`/menu/cooking`"
           class="w-full col-span-1 sm:col-span-2 text-center btn btn-ghost hover:bg-red-600 hover:text-white bg-transparent text-base-content border-red-600 border"
           >Добавить методы варки/жарки</NuxtLink
         >
         <NuxtLink
-          v-if="store.client.username !== 'admin'"
+          v-if="store.client.role == 'admin'"
           :to="`/menu/cooking/edit`"
           class="w-full col-span-1 sm:col-span-2 text-center btn btn-ghost hover:bg-red-600 hover:text-white bg-transparent text-base-content border-red-600 border"
           >Редактировать список варки/жарки</NuxtLink

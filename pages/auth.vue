@@ -1,9 +1,20 @@
 <!-- eslint-disable @typescript-eslint/no-use-before-define -->
 <script lang="ts" setup>
+import { notify } from '@kyvg/vue3-notification';
 import { useVuelidate } from '@vuelidate/core'
 import { email, helpers, minLength, required } from '@vuelidate/validators'
 
 const store = useMainStore()
+
+onMounted(() => {
+  const isPageReloaded = localStorage.getItem('isPageReloaded')
+
+  if (!isPageReloaded) {
+    localStorage.setItem('isPageReloaded', 'true')
+
+    window.location.reload()
+  }
+})
 
 definePageMeta({
   colorMode: 'light',
@@ -14,7 +25,7 @@ definePageMeta({
   title: 'Вход',
 })
 
-const route = useRoute()
+const router = useRouter()
 const { status, data, signIn, signOut } = useAuth()
 const name = useRuntimeConfig().public.NAME
 const alert = ref(false)
@@ -46,7 +57,12 @@ async function login() {
       alertText.value = 'Аккаунт заблокирован'
       alertType.value = 'warning'
     } else {
-      alertText.value = 'Неверный номер телефона или пароль'
+      notify({
+        text: 'Неверный номер телефона или пароль',
+        type: 'warn',
+        duration: 3000,
+      })
+      // alertText.value = 'Неверный номер телефона или пароль'
     }
     alert.value = true
     setTimeout(() => {
@@ -55,7 +71,7 @@ async function login() {
   } else {
     localStorage.removeItem('referralCode')
     store.getClient()
-    return navigateTo('/guide', { external: true })
+    return navigateTo('/', { external: true })
   }
   loading.value = false
 }
@@ -80,8 +96,7 @@ onMounted(async () => {
     }, 3000)
   }
   if (params?.confirmed) {
-    alertText.value =
-      'Письмо для подтверждения было отправлено на указанный email. (Проверьте папку Спам)'
+    alertText.value = 'Письмо для подтверждения было отправлено на указанный email. (Проверьте папку Спам)'
     setTimeout(() => {
       alert.value = true
     }, 0)
@@ -115,23 +130,10 @@ const rules = computed(() => {
 })
 
 const v$ = useVuelidate(rules, formData)
-
-onMounted(() => {
-  const isPageReloaded = localStorage.getItem('isPageReloaded')
-  if (route.query?.landing && typeof route.query?.landing === 'string') {
-    localStorage.setItem('landing', route.query?.landing)
-  }
-
-  if (!isPageReloaded) {
-    localStorage.setItem('isPageReloaded', 'true')
-
-    window.location.reload()
-  }
-})
 </script>
 
 <template>
-  <div id="auth" class="flex sm:items-center sm:justify-center h-screen">
+  <div id="auth" class="flex flex-col items-center justify-center min-h-[calc(60vh)]">
     <!-- <Toast :type="alertType" style="z-index: 1000" :active="alert">
       {{ alertText }}
     </Toast> -->
@@ -146,10 +148,8 @@ onMounted(() => {
           <div class="flex flex-col gap-1">
             <label>Номер телефона </label>
             <input
-              v-maska
-              data-maska="+7 (###) ###-##-##"
               v-model="formData.email"
-              placeholder="+7 (___) ___-__-__"
+              placeholder="mail@mail.ru"
               required="true"
               class="input"
             />
@@ -167,11 +167,7 @@ onMounted(() => {
                   required="true"
                   class="input w-full"
                 />
-                <button
-                  type="button"
-                  class="hover:text-primary w-1/12"
-                  @click="togglePassword"
-                >
+                <button type="button" class="hover:text-primary w-1/12" @click="togglePassword">
                   <IconCSS
                     v-if="passwordShow"
                     class="w-20 h-20"
@@ -211,17 +207,10 @@ onMounted(() => {
             </p>
           </div>
         </form>
-
-        <!-- 
-        <p class="text-xs text-gray-500">
-          Регистрируясь вы принимаете
-          <a href="/user_agreement.pdf" target="_blank">Пользовательское соглашение</a>, <br />
-          и подтверждаете, что ознакомлены с
-          <a href="/conf_policy.pdf" target="_blank">Политикой конфиденциальности</a>.
-        </p> -->
       </div>
     </section>
   </div>
 </template>
+
 
 <style scoped></style>

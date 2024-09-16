@@ -145,7 +145,6 @@ function navigation(path: string) {
           <div class="flex justify-center items-center">
             <NuxtLink to="/" class="my-auto flex">
               <nuxt-img src="/favicon.png" class="w-20 rounded-full" />
-              12312
             </NuxtLink>
             <div class="flex flex-col my-auto">
               <NuxtLink
@@ -247,7 +246,7 @@ function navigation(path: string) {
               <NuxtLink
                 :to="'/menu' + navbar.path + '/' + filter.uuid"
                 :external="false"
-                class="btn border-none-class overflow-hidden text-[0.7rem] rounded-none border-none btn-ghost btn-xs h-[2rem] text-xs normal-case font-normal w-full leading-none items-center justify-start text-left hover:text-red-600"
+                class="btn border-none-class overflow-hidden text-[0.6rem] rounded-none border-none btn-ghost btn-xs h-[2rem] text-xs normal-case font-normal w-full leading-none items-center justify-start text-left hover:text-red-600"
               >
                 <span>{{ filter.name }}</span>
               </NuxtLink>
@@ -261,7 +260,7 @@ function navigation(path: string) {
       </div>
 
       <!-- Футер -->
-      <div class="w-full text-black p-10 text-center border-t">
+      <div class="w-full text-black p-10 text-center border-t mt-5">
         <div>Контактная информация: +7 (987) 133 45 36 | rikrtop@inbox.ru</div>
         <div class="mt-2">г.Казань, ул Меридианная 10а</div>
         <div class="mt-2">
