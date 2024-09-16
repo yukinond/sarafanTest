@@ -14,6 +14,7 @@ const UserSchema = new Schema({
   balance: { type: Number, default: 0, required: true },
   registrationDate: { type: Date, default: Date.now },
   newPassword: { type: String },
+  role: { type: String, default: 'user' },
 })
 
 export const User = model('User', UserSchema)

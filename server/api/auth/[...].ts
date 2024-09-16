@@ -1,7 +1,6 @@
 import CredentialsProvider from 'next-auth/providers/credentials'
 import bcrypt from 'bcrypt'
 import { v4 as uuid } from 'uuid'
-import { checkSignature } from '~~/server/lib/telegram/mod'
 import { User } from '~/server/lib/models/User'
 import { NuxtAuthHandler } from '#auth'
 
@@ -67,7 +66,7 @@ export default NuxtAuthHandler({
 
         const user =
           (await User.findOne({
-            phoneNumber: email.replace(/[\(\)\-\s]/g, ''),
+            email: email,
           })) || (await User.findOne({ username: email }))
 
         if (!user) {

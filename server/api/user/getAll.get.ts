@@ -9,21 +9,12 @@ export default eventHandler(async (event) => {
   const user = await User.findOne({ uuid: session.uuid })
   if (!user) return sendRedirect(event, '/auth', 302)
 
-
-  const client = {
-    email: user.email ? user.email : '',
-    username: user.email === user.username ? '' : user.username,
-    uuid: user.uuid,
-    balance: user.balance,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    hasPassword: !!user.password,
-    isBanned: user.isBanned,
-    role: user.role,
-  }
+  const users = await User.find()
+  const admins = users.filter((user) => user.role === 'admin')
+  const clients = users.filter((user) => user.role !== 'admin')
 
   return {
-    client,
+    data: {admins, clients},
     status: 'ok',
   }
 })

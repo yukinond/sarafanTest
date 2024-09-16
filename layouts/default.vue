@@ -145,7 +145,6 @@ function navigation(path: string) {
           <div class="flex justify-center items-center">
             <NuxtLink to="/" class="my-auto flex">
               <nuxt-img src="/favicon.png" class="w-20 rounded-full" />
-              12312
             </NuxtLink>
             <div class="flex flex-col my-auto">
               <NuxtLink
