@@ -138,11 +138,11 @@ export default defineNuxtConfig({
         secretAccessKey: process.env.VK_SECRET_KEY || '',
         accessKeyId: process.env.VK_ACCESS_KEY || '',
       },
-      endpoint: 'https://hb.vkcs.cloud/reviewImages/',
+      endpoint: 'https://hb.vkcs.cloud/menuImages/',
       region: 'ru-msk',
     },
     publicBucketUrl: `${process.env.PUBLIC_SITE_URL}/images/get/`,
-    bucket: 'ozonmpportal',
+    bucket: 'photodlablyatskogosaita',
     image: {
       compression: {
         maxSizeMB: 10,

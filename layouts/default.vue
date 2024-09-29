@@ -174,7 +174,7 @@ function navigation(path: string) {
                   <NuxtLink to="/contacts" class="px-1.5">Контакты</NuxtLink>
                 </li>
                 <li><a class="px-1.5">Доставка</a></li>
-                <li v-if="store.client.role === ('chef' || 'manager')">
+                <li v-if="store.client.role === ('admin')">
                   <NuxtLink to="/orders">Заказы</NuxtLink>
                 </li>
               </div>
@@ -241,12 +241,12 @@ function navigation(path: string) {
               v-for="filter in menu.filter(
                 (x) => x.menuType === navbar.path.replace('/', '')
               )"
-              class="hover:bg-red-100 transition-all duration-300 bg-white"
+              class="transition-all border-none-class duration-200 py-0.5 bg-white"
             >
               <NuxtLink
                 :to="'/menu' + navbar.path + '/' + filter.uuid"
                 :external="false"
-                class="btn border-none-class overflow-hidden text-[0.6rem] rounded-none border-none btn-ghost btn-xs h-[2rem] text-xs normal-case font-normal w-full leading-none items-center justify-start text-left hover:text-red-600"
+                class="btn overflow-hidden text-xs text-[0.68rem] rounded-none border-none btn-ghost btn-xs h-[2rem] normal-case font-normal w-full leading-none items-center justify-start text-left hover:text-red-600"
               >
                 <span>{{ filter.name }}</span>
               </NuxtLink>
@@ -255,13 +255,16 @@ function navigation(path: string) {
         </div>
       </div>
       <!-- Основной контент страницы -->
-      <div class="flex-grow">
+      <div class="flex-grow northern-lights py-5">
         <slot />
       </div>
 
       <!-- Футер -->
       <div class="w-full text-black p-10 text-center border-t mt-5">
-        <div>Контактная информация: +7 (987) 133 45 36 | rikrtop@inbox.ru</div>
+        <div>
+          Контактная информация: +7 (843) 215 99 88; +7 (987) 215 99 88 |
+          rikrtop@inbox.ru
+        </div>
         <div class="mt-2">г.Казань, ул Меридианная 10а</div>
         <div class="mt-2">
           <a href="#" class="text-coral-300">Политика конфиденциальности</a> |
@@ -399,4 +402,59 @@ li:hover .btn {
 li:hover .btn span {
   color: #ff0000;
 }
+
+/* .northern-lights {
+  position: relative;
+  overflow: hidden;
+  min-height: 100vh;
+  background: linear-gradient(180deg, #ff0000 0%, #1c1c1c 100%);
+  z-index: 0;
+}
+
+.northern-lights::before,
+.northern-lights::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 200%;
+  height: 200%;
+  z-index: -1;
+}
+
+.northern-lights::before {
+  background: radial-gradient(circle at 50% 50%, rgba(255, 0, 0, 0.6), rgba(0, 0, 0, 0));
+  animation: aurora-red 18s infinite linear;
+  opacity: 0.8;
+}
+
+.northern-lights::after {
+  background: radial-gradient(circle at 50% 50%, rgba(21, 0, 255, 0.4), rgba(0, 0, 0, 0));
+  animation: aurora 25s infinite linear reverse;
+  opacity: 0.7;
+}
+
+@keyframes aurora-red {
+  0% {
+    transform: translateX(50%) translateY(-30%);
+  }
+  50% {
+    transform: translateX(0) translateY(0);
+  }
+  100% {
+    transform: translateX(50%) translateY(-30%);
+  }
+}
+
+@keyframes aurora {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(50%) translateY(-20%);
+  }
+  100% {
+    transform: translateX(0) translateY(0);
+  }
+} */
 </style>

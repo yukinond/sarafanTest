@@ -7,6 +7,7 @@ definePageMeta({
   title: 'Добавление нового меню',
 })
 
+const config = useRuntimeConfig()
 const route = useRoute()
 const router = useRouter()
 const form = reactive({
@@ -23,21 +24,47 @@ form.menuType = navbarDataList.find(
   (navbar) => navbar.path === '/' + route.params.path
 ).title
 
-async function handleImageUpload(event: any) {
-  const file = event.target.files[0]
-  if (file) {
-    const reader = new FileReader()
-    reader.onloadend = () => {
-      form.image = reader.result as string
-    }
-    reader.readAsDataURL(file)
-  }
-}
+// async function handleImageUpload(event: any) {
+//   const file = event.target.files[0]
+//   if (file) {
+//     const reader = new FileReader()
+//     reader.onloadend = () => {
+//       form.image = reader.result as string
+//     }
+//     reader.readAsDataURL(file)
+//   }
+// }
 
 const menu = ref([])
 const menuStore = useMenuStore()
 menu.value = menuStore.menu
+const imageLoadingEvent = ref<Event | null>(null)
+
+function handleImageChange(event: Event) {
+  imageLoadingEvent.value = event
+}
 async function submitForm() {
+  const cookingsArr = form.cooking
+  form.cooking = form.cooking.filter((cooking) => cooking.checked)  
+  const isAllCookingsCheckedHavePrice = form.cooking.every((cooking) => cooking.price)
+  if(!isAllCookingsCheckedHavePrice) {
+    notify({
+      title: 'Ошибка',
+      text: 'Укажите цену для всех методов готовки',
+      type: 'error',
+    })
+    form.cooking = cookingsArr
+    return
+  }
+
+  if (imageLoadingEvent.value) {
+    const loadingImage = await uploadToS3(imageLoadingEvent.value)
+    if(!loadingImage) {
+      form.cooking = cookingsArr
+      return
+    }
+  }
+
   try {
     const { error, data } = await useFetch('/api/menu/create', {
       method: 'POST',
@@ -65,12 +92,14 @@ async function submitForm() {
         type: 'error',
       })
     }
+    form.cooking = cookingsArr
   } catch (error) {
     console.error('Ошибка при добавлении данных:', error)
+    form.cooking = cookingsArr
   }
 }
 
-const cooking = ref([])
+const cooking = ref([]) as any
 const cookingLoading = ref(false)
 async function getCooking() {
   try {
@@ -81,6 +110,7 @@ async function getCooking() {
     })
     if (data.value) {
       cooking.value = data.value
+      form.cooking = data.value.map((item: any) => ({ ...item, checked: false, price: 0 }))
       cookingLoading.value = false
     }
     if (error.value) {
@@ -99,13 +129,19 @@ async function getCooking() {
 getCooking()
 
 function handleCheckboxChange(cooks: any) {
-  const index = form.cooking.findIndex((item: any) => item.id === cooks.id)
+  // console.log('cooks:', cooks);
+  const index = form.cooking.findIndex((item: any) => item._id === cooks._id)
 
+  console.log('Index:', index)
   if (index !== -1) {
-    form.cooking.splice(index, 1)
+    if (typeof form.cooking[index].checked === 'undefined') {
+      form.cooking[index].checked = false
+    }
+    form.cooking[index].checked = !form.cooking[index].checked
   } else {
-    form.cooking.push(cooks)
+    form.cooking.push({ ...cooks, checked: true })
   }
+  // console.log('form.cooking:', form.cooking[index]);
 }
 
 const price = ref(0)
@@ -146,7 +182,6 @@ function addCooking(cookingg: any) {
   }
 }
 
-// Изменено на reactive
 const details = reactive({ title: '', value: '' })
 
 function addDetails() {
@@ -173,7 +208,9 @@ function addAllCooking() {
     return
   }
 
-  const uniqueCookingTypes = new Set(cooking.value.map((item: any) => item.uuid))
+  const uniqueCookingTypes = new Set(
+    cooking.value.map((item: any) => item.uuid)
+  )
 
   uniqueCookingTypes.forEach((uuid: string) => {
     const cookingItem = cooking.value.find((item: any) => item.uuid === uuid)
@@ -188,6 +225,57 @@ function addAllCooking() {
   price.value = 0
 }
 
+const { upload, getPublicUrl, remove } = useS3Object()
+
+async function uploadToS3(event: Event) {
+  // loadingIndex.value = index
+  const fileList = (event.target! as HTMLInputElement).files
+  const files = Array.from(fileList!)
+  if (!files) return
+
+  if (
+    files[0] &&
+    files[0].name &&
+    files[0].name.toLowerCase().endsWith('.webp')
+  ) {
+    notify({
+      title: 'Что-то пошло не так',
+      text: 'Нельзя загружать вебпикчи',
+      type: 'error',
+      duration: 3000,
+    })
+
+    // loadingIndex.value = null
+    return false
+  }
+
+  const { data, error } = await upload({
+    files,
+    url: null,
+  })
+  if (error.value) {
+    notify({
+      title: 'Что-то пошло не так',
+      text: 'Не удалось загрузить фото '+error.value,
+      type: 'error',
+      duration: 3000,
+    })
+    return false
+  }
+  if (data.value) {
+    //@ts-ignore
+    await useFetch('/api/images/openForPublic', {
+      method: 'GET',
+      params: {
+        path: 'menuImages/' + data.value[0].key,
+      },
+    })
+    
+    form.image =  `${config.public.DOMAIN_API_IMAGES_URL}menuImages/${data.value[0].key}`
+
+  }
+  return true
+}
 </script>
 
 <template>
@@ -246,7 +334,7 @@ function addAllCooking() {
           </div>
 
           <div class="mb-10">
-            <label for="price" class="block text-sm font-medium mb-2"
+            <!-- <label for="price" class="block text-sm font-medium mb-2"
               >Методы готовки:</label
             >
             <div class="flex flex-col gap-2">
@@ -279,7 +367,7 @@ function addAllCooking() {
                   Добавить все
                 </button>
               </div>
-            </div>
+            </div> -->
             <div
               v-if="!cookingLoading"
               class="flex justify-between w-full gap-4"
@@ -291,29 +379,43 @@ function addAllCooking() {
                   class="flex flex-col gap-2 border border-red-400 p-2 h-full rounded-lg"
                 >
                   <div
-                    class="form-control"
+                    class="form-control flex flex-row w-full justify-between"
                     v-for="cooking in form.cooking.filter(
                       (cooking) => cooking.type === 'Варка'
                     )"
                     :key="cooking.id"
                   >
-                    <label class="cursor-pointer label">
-                      <span class="label-text">{{
-                        cooking.name + ' (+' + cooking.price + ' руб.)'
-                      }}</span>
-                      <input
-                        type="checkbox"
-                        class="checkbox checkbox-error"
-                        :checked="
-                          form.cooking.find(
-                            (item) => item.uuid === cooking.uuid
-                          )
-                            ? true
-                            : false
-                        "
-                        @change="handleCheckboxChange(cooking)"
-                      />
+                    <div class="flex justify-between w-full">
+                      <label
+                      :for="'checkbox-' + cooking.id"
+                      class="cursor-pointer label"
+                    >
+                      <span class="label-text">{{ cooking.name }}</span>
                     </label>
+
+                    <div class="flex items-center">
+                      <input
+                        type="number"
+                        class="input input-xs input-bordered w-20 mx-2"
+                        v-model="cooking.price"
+                        placeholder="0"
+                      />
+                      <span class="ml-1">₽</span>
+                    </div>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      :id="'checkbox-' + cooking.id"
+                      class="checkbox checkbox-error ml-2 flex my-auto"
+                      :checked="
+                        form.cooking.find((item) => item.uuid === cooking.uuid)
+                          .checked
+                          ? true
+                          : false
+                      "
+                      @change="handleCheckboxChange(cooking)"
+                    />
                   </div>
                 </div>
               </div>
@@ -324,30 +426,45 @@ function addAllCooking() {
                 <div
                   class="flex flex-col gap-2 border border-red-400 p-2 h-full rounded-lg"
                 >
-                  <div
-                    class="form-control"
+                <div
+                    class="form-control flex flex-row w-full justify-between"
                     v-for="cooking in form.cooking.filter(
                       (cooking) => cooking.type === 'Жарка'
                     )"
                     :key="cooking.id"
                   >
-                    <label class="cursor-pointer label">
-                      <span class="label-text">{{
-                        cooking.name + ' (+' + cooking.price + ' руб.)'
-                      }}</span>
-                      <input
-                        type="checkbox"
-                        :checked="
-                          form.cooking.find(
-                            (item) => item.uuid === cooking.uuid
-                          )
-                            ? true
-                            : false
-                        "
-                        class="checkbox checkbox-error"
-                        @change="handleCheckboxChange(cooking)"
-                      />
+                    <div class="flex justify-between w-full">
+                      <label
+                      :for="'checkbox-' + cooking.id"
+                      class="cursor-pointer label"
+                    >
+                      <span class="label-text">{{ cooking.name }}</span>
                     </label>
+
+                    <div class="flex items-center">
+                      <input
+                        type="number"
+                        class="input input-xs input-bordered w-20 mx-2"
+                        v-model="cooking.price"
+                        placeholder="0"
+                      />
+                      <span class="ml-1">₽</span>
+                    </div>
+                    </div>
+
+                    <input
+                      type="checkbox"
+                      :id="'checkbox-' + cooking.id"
+                      :v-model="cooking.price"
+                      class="checkbox checkbox-error ml-2 flex my-auto"
+                      :checked="
+                        form.cooking.find((item) => item.uuid === cooking.uuid)
+                          .checked
+                          ? true
+                          : false
+                      "
+                      @change="handleCheckboxChange(cooking)"
+                    />
                   </div>
                 </div>
               </div>
@@ -412,7 +529,7 @@ function addAllCooking() {
             <input
               id="image"
               type="file"
-              @change="handleImageUpload"
+              @change="handleImageChange"
               accept="image/*"
               class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
             />
@@ -421,6 +538,7 @@ function addAllCooking() {
               class="h-48 w-48 object-cover mx-auto"
               :src="form.image"
             />
+            {{ form.image }}
           </div>
 
           <div class="flex justify-end">

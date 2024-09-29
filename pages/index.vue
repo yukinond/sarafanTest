@@ -34,7 +34,7 @@ function prevSlide() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-10 overflow-auto">
+  <div class="flex flex-col gap-10 overflow-auto ">
     <!-- Слайдер -->
     <div class="carousel w-full overflow-hidden relative">
       <div
@@ -278,4 +278,7 @@ details:not([open]) .summary-icon {
   opacity: 0;
   overflow: hidden;
 }
+
+
+
 </style>

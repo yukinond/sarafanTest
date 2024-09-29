@@ -128,9 +128,10 @@ if (!pageData) {
                 :to="`/menu/${route.params.path}/${buyout.uuid}`"
                 class="w-full h-full bg-cover bg-center absolute inset-0"
                 :style="{
-                  backgroundImage: `url(${buyout.image})`,
+                  backgroundImage: `url(${buyout.image ? buyout.image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYVjCv6r01QNNREAOWdrg1XtogAUnho3wTmtnubDkacSR7UlSWJWD7yAj5h4DU7NS9ecw&usqp=CAU'})`,
                 }"
               >
+              
               </NuxtLink>
               <NuxtLink
                 v-if="store.client.role == 'admin'"

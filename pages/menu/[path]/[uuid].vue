@@ -132,6 +132,8 @@ function confirmWarning() {
   showInfoWarningModal.value = false
   modalOpen.value = false
 }
+
+
 </script>
 
 <template>

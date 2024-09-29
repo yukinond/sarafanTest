@@ -9,40 +9,13 @@ const route = useRoute()
 const menuStore = useMenuStore()
 const store = useMainStore()
 
-
 const menu = ref([])
 const dataLoading = ref(false)
 menu.value = menuStore.menu
-// async function getData() {
-//   try {
-//     dataLoading.value = true
-//     const { error, data } = await useFetch('/api/menu/getMenu', {
-//       method: 'GET',
-//       watch: false,
-//     })
-
-//     if (data.value) {
-//       menu.value = data.value.menu
-//       dataLoading.value = false
-//     }
-//     if (error.value) {
-//       notify({
-//         title: 'Ошибка',
-//         text: error.value.data.message,
-//         type: 'error',
-//       })
-//       dataLoading.value = false
-//     }
-//   } catch (error) {
-//     console.error('Ошибка при получение данных:', error)
-//     dataLoading.value = false
-//   }
-// }
-// getData()
 </script>
 
 <template>
-  <div class="flex justify-center items-center mx-auto w-full">
+  <div class="flex justify-center items-center mx-auto w-full ">
     <div class="flex justify-between w-full max-w-4xl px-8 gap-3 my-5">
       <div
         v-if="dataLoading && menu.length === 0"
@@ -132,4 +105,7 @@ menu.value = menuStore.menu
   </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+
+
+</style>

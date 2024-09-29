@@ -88,7 +88,7 @@ const menuStore = useMenuStore()
             <h2 class="text-xl font-semibold text-gray-800 mb-1">
               Контактный телефон
             </h2>
-            <p class="text-gray-700 text-sm">+7 (987) 133 45 36</p>
+            <p class="text-gray-700 text-sm">+7 (843) 215 99 88; +7 (987) 215 99 88 </p>
           </div>
         </div>
 
