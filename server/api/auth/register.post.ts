@@ -4,6 +4,7 @@ import validator from 'validator'
 import { getServerSession } from '#auth'
 import { User } from '~~/server/lib/models/User'
 import { createUsername } from '~/server/utils/createUsername'
+import MailService from '~~/server/lib/mailService.js'
 
 function hasWhiteSpace(s: string) {
   return s.includes(' ') || !/^[a-zA-Z0-9_-]{4,14}$/.test(s)
@@ -63,13 +64,13 @@ export default eventHandler(async (event) => {
     emailConfirmed: true,
   })
   await user.save()
-  // const url = useRuntimeConfig().PUBLIC_SITE_URL
-  // const link = `${url}/api/auth/activate?uuid=${user.uuid}`
-  // try {
-  //   await MailService.sendActivationMail(user.email, link)
-  // } catch (error) {
-  //   return { status: 'error', error: 'Ошибка отправки письма.' }
-  // }
+  const url = useRuntimeConfig().PUBLIC_SITE_URL
+  const link = `${url}/api/auth/activate?uuid=${user.uuid}`
+  try {
+    await MailService.sendActivationMail(user.email, link)
+  } catch (error) {
+    return { status: 'error', error: 'Ошибка отправки письма.'+error }
+  }
 
   return { status: 'ok', error: null }
 })

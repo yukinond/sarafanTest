@@ -106,11 +106,33 @@ const router = useRouter()
 function navigation(path: string) {
   router.push(path)
 }
+
+function disableScroll() {
+  document.body.style.overflow = 'hidden'
+}
+
+function enableScroll() {
+  document.body.style.overflow = ''
+}
+const isDrawerOpen = ref(false)
+
+watch(isDrawerOpen, (newValue) => {
+  if (newValue) {
+    disableScroll()
+  } else {
+    enableScroll()
+  }
+})
 </script>
 
 <template>
   <div class="drawer min-h-screen flex flex-col">
-    <input id="my-drawer-3" type="checkbox" class="drawer-toggle" />
+    <input
+      id="my-drawer-3"
+      type="checkbox"
+      class="drawer-toggle"
+      v-model="isDrawerOpen"
+    />
     <div class="drawer-content flex flex-col bg-white flex-grow">
       <!-- Navbar -->
       <div
@@ -174,7 +196,7 @@ function navigation(path: string) {
                   <NuxtLink to="/contacts" class="px-1.5">Контакты</NuxtLink>
                 </li>
                 <li><a class="px-1.5">Доставка</a></li>
-                <li v-if="store.client.role === ('admin')">
+                <li v-if="store.client.role === 'admin'">
                   <NuxtLink to="/orders">Заказы</NuxtLink>
                 </li>
               </div>
@@ -260,33 +282,143 @@ function navigation(path: string) {
       </div>
 
       <!-- Футер -->
-      <div class="w-full text-black p-10 text-center border-t mt-5">
-        <div>
-          Контактная информация: +7 (843) 215 99 88; +7 (987) 215 99 88 |
-          rikrtop@inbox.ru
+      <div
+        class="w-full md:w-2/3 text-black p-5 md:p-10 pb-0 mx-auto border-t mt-5"
+      >
+        <div
+          class="flex flex-col md:flex-row justify-center gap-10 items-center md:items-start"
+        >
+          <div class="flex flex-col items-center md:items-start mb-5 md:mb-0">
+            <div class="font-semibold text-lg text-center md:text-left">
+              Контактная информация:
+            </div>
+            <div class="flex justify-center md:justify-start mt-4">
+              <NuxtLink to="/" class="flex items-center">
+                <nuxt-img
+                  src="/favicon.png"
+                  class="w-16 md:w-20 rounded-full mr-3"
+                />
+                <div class="flex flex-col text-center md:text-left">
+                  <NuxtLink
+                    to="/"
+                    class="text-2xl md:text-3xl font-bold text-gray-800"
+                  >
+                    Rikrtop
+                  </NuxtLink>
+                  <button
+                    type="button"
+                    @click.stop="navigation('/menu')"
+                    class="btn rounded-full btn-xs bg-red-600 text-white text-xs font-normal mt-2 hover:bg-transparent hover:border hover:border-red-600 hover:text-black"
+                  >
+                    Заказать онлайн
+                  </button>
+                </div>
+              </NuxtLink>
+            </div>
+          </div>
+          <!-- Контакты -->
+          <div class="flex flex-col space-y-2 text-center md:text-left">
+            <div class="flex items-center">
+              <Icon name="fluent:phone-32-regular" size="20" class="mr-2" />
+              <span class="text-sm md:text-base"
+                >+7 (843) 215 99 88; +7 (987) 215 99 88</span
+              >
+            </div>
+            <div class="flex items-center">
+              <Icon name="carbon:email" size="20" class="mr-2" />
+              <span class="text-sm md:text-base">rikrtop@inbox.ru</span>
+            </div>
+            <div class="flex items-center">
+              <Icon name="ph:map-pin-light" size="20" class="mr-2" />
+              <span class="text-sm md:text-base"
+                >г. Казань, ул. Меридианная 10а</span
+              >
+            </div>
+            <div class="flex items-center">
+              <Icon name="ri:vk-line" size="20" class="mr-2" />
+              <span class="text-sm md:text-base">vk/rikrtop.com</span>
+            </div>
+            <div class="flex items-center">
+              <Icon name="mingcute:telegram-line" size="20" class="mr-2" />
+              <span class="text-sm md:text-base">tg:rikrtop</span>
+            </div>
+            <div class="flex items-center">
+              <Icon name="bi:instagram" size="20" class="mr-2" />
+              <span class="text-sm md:text-base">inst:rikrtop</span>
+            </div>
+          </div>
         </div>
-        <div class="mt-2">г.Казань, ул Меридианная 10а</div>
-        <div class="mt-2">
-          <a href="#" class="text-coral-300">Политика конфиденциальности</a> |
-          <NuxtLink to="/about" class="text-coral-300">О нас</NuxtLink>
+        <!-- Политика и информация -->
+        <div
+          class="mt-5 mb-5 md:mb-10 flex flex-col md:flex-row gap-2 md:gap-3 justify-center items-center w-full text-sm md:text-base"
+        >
+          <a href="#" class="text-coral-300 hover:underline"
+            >Политика конфиденциальности</a
+          >
+          <span class="hidden md:block">|</span>
+          <NuxtLink to="/about" class="text-coral-300 hover:underline"
+            >О нас</NuxtLink
+          >
         </div>
       </div>
     </div>
-    <div class="drawer-side z-[99999]">
+    <div class="drawer-side z-[99999] h-screen overflow-hidden">
       <label
         for="my-drawer-3"
         aria-label="close sidebar"
-        class="drawer-overlay"
+        class="drawer-overlay max-h-sreen overflow-y-hidden"
       ></label>
-      <ul class="menu bg-base-200 min-h-full w-80 p-4">
+      <ul class="menu bg-base-200 min-h-full w-80 p-4 overflow-hidden">
+        <div class="menu menu-horizontal gap-2 flex justify-center mb-5 w-full">
+          <!-- Navbar menu content here -->
+          <li class="w-1/4">
+            <NuxtLink
+              to="/profile"
+              class="rounded-none border text-gray-500 flex justify-center"
+              ><Icon
+                name="healthicons:ui-user-profile-outline"
+                size="20"
+                class="cart-icon"
+            /></NuxtLink>
+          </li>
+          <li class="w-1/4">
+            <button
+              @click=";[(inputModal = true), (isDrawerOpen = false)]"
+              class="rounded-none border text-gray-500 flex justify-center"
+            >
+              <Icon name="system-uicons:search" size="20" class="cart-icon" />
+            </button>
+          </li>
+          <li class="w-1/4">
+            <button
+              @click=";[(openCart = true), (isDrawerOpen = false)]"
+              class="rounded-none border text-gray-500 flex justify-center"
+            >
+              <Icon name="solar:cart-3-outline" size="20" class="cart-icon" />
+            </button>
+          </li>
+        </div>
+        <li class="my-1 border rounded-xl hover:border-b-red-600">
+          <NuxtLink to="/menu">Меню</NuxtLink>
+        </li>
+        <li class="my-1 border rounded-xl hover:border-b-red-600">
+          <NuxtLink to="/about">О компании</NuxtLink>
+        </li>
+        <li class="my-1 border rounded-xl hover:border-b-red-600">
+          <NuxtLink to="/contacts">Контакты</NuxtLink>
+        </li>
+        <li class="my-1 border rounded-xl hover:border-b-red-600">
+          <NuxtLink to="/delivery">Доставка</NuxtLink>
+        </li>
+
         <!-- Sidebar content here -->
-        <li
+        <!-- <li
           v-for="navbar in navbarDataList"
           :key="navbar.path"
           class="my-1 border rounded-xl hover:border-b-red-600"
         >
           <NuxtLink :to="navbar.path">{{ navbar.title }}</NuxtLink>
-        </li>
+        </li> -->
       </ul>
     </div>
   </div>

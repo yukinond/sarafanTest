@@ -272,7 +272,7 @@ const startTimer = () => {
   timerRunning.value = true
   timerVisible.value = true
   interval = setInterval(() => {
-    if (timer.value > 0 ) {
+    if (timer.value > 0) {
       timer.value--
     } else {
       clearInterval(interval)
@@ -290,12 +290,13 @@ const resend = () => {
 }
 
 const togglePassword = () => {
-  passwordInputType.value = (passwordInputType.value === 'password') ? 'text' : 'password';
+  passwordInputType.value =
+    passwordInputType.value === 'password' ? 'text' : 'password'
 }
 const toggleConfirmPassword = () => {
-  passwordConfirmInputType.value = (passwordConfirmInputType.value === 'password') ? 'text' : 'password';
+  passwordConfirmInputType.value =
+    passwordConfirmInputType.value === 'password' ? 'text' : 'password'
 }
-
 </script>
 
 <template>
@@ -313,7 +314,6 @@ const toggleConfirmPassword = () => {
       <div class="px-5 pb-2">
         <div class="relative">
           <div>
-          
             <label for="email" class="block mb-2 ml-1 my-1 text-sm font-medium">
               Email
             </label>
@@ -322,7 +322,7 @@ const toggleConfirmPassword = () => {
               v-model="formData.email"
               type="email"
               name="email"
-              class="input input-sm xl:input-md input-bordered sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+              class="input w-full"
               :class="{
                 'input-error': v$.email.$error,
               }"
@@ -348,14 +348,13 @@ const toggleConfirmPassword = () => {
               >Пароль
             </label>
             <div class="flex relative">
-              <input  
+              <input
                 id="password"
                 v-model="formData.password"
                 :type="passwordInputType"
                 name="password"
                 placeholder="••••••••"
-                class="input input-sm xl:input-md input-bordered sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
-
+                class="input w-full"
                 :class="{
                   'input-error': v$.password.$error,
                 }"
@@ -363,25 +362,25 @@ const toggleConfirmPassword = () => {
                 @change="v$.password.$touch"
               />
               <button
-                type="button" 
-                class="absolute right-0 -top-1 xl:top-1 mt-2 mr-2 hover:text-primary disabled:text-black" 
+                type="button"
+                class="absolute right-0 -top-1 xl:top-1 mt-2 mr-2 hover:text-primary disabled:text-black"
                 @click="togglePassword"
               >
-                  <IconCSS
-                    v-if="passwordInputType === 'password'"
-                    class="w-20 h-20"
-                    size="25"
-                    name="mdi:hide-outline"
-                  />
-                  <IconCSS
-                    v-else
-                    class="w-20 h-20"
-                    size="25"
-                    name="mdi:show-outline"
-                  />
+                <IconCSS
+                  v-if="passwordInputType === 'password'"
+                  class="w-20 h-20"
+                  size="25"
+                  name="mdi:hide-outline"
+                />
+                <IconCSS
+                  v-else
+                  class="w-20 h-20"
+                  size="25"
+                  name="mdi:show-outline"
+                />
               </button>
             </div>
-            
+
             <div
               class="input-errors text-sm text-error mt-1 flex justify-end absolute r-0 w-full"
             >
@@ -401,30 +400,30 @@ const toggleConfirmPassword = () => {
                 :type="passwordConfirmInputType"
                 name="confirm-password"
                 placeholder="••••••••"
-                class="input input-sm xl:input-md input-bordered sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5"
+                class="input w-full"
                 :class="{
                   'input-error': v$.confirmPassword.$error,
                 }"
                 required="true"
                 @change="v$.confirmPassword.$touch"
               />
-              <button 
-                type="button" 
+              <button
+                type="button"
                 class="absolute right-0 -top-1 xl:top-1 mt-2 mr-2 hover:text-primary disabled:text-black"
                 @click="toggleConfirmPassword"
               >
-                  <IconCSS
-                    v-if="passwordConfirmInputType === 'password'"
-                    class="w-20 h-20"
-                    size="25"
-                    name="mdi:hide-outline"
-                  />
-                  <IconCSS
-                    v-else
-                    class="w-20 h-20"
-                    size="25"
-                    name="mdi:show-outline"
-                  />
+                <IconCSS
+                  v-if="passwordConfirmInputType === 'password'"
+                  class="w-20 h-20"
+                  size="25"
+                  name="mdi:hide-outline"
+                />
+                <IconCSS
+                  v-else
+                  class="w-20 h-20"
+                  size="25"
+                  name="mdi:show-outline"
+                />
               </button>
             </div>
             <div
@@ -436,7 +435,6 @@ const toggleConfirmPassword = () => {
               </div>
             </div>
           </div>
-
         </div>
         <div class="flex flex-col gap-0.5">
           <button

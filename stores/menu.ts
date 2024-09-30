@@ -50,15 +50,21 @@ export const useMenuStore = defineStore('menu', {
     addToCart(product: any) {
       const existingProduct = this.cart.find((item: any) =>
         item.uuid === product.uuid &&
-        item.cooking[0]?.uuid === product.cooking[0]?.uuid
+        item.cooking[0]?.uuid === product.cooking[0]?.uuid &&
+        item.cookingTypeAdds.length === product.cookingTypeAdds.length && 
+        item.cookingTypeAdds.every((add: any, index: number) => add.value === product.cookingTypeAdds[index].value)
       );
 
       if (existingProduct) {
         existingProduct.count++;
       } else {
         product.count = 1;
-        product.totalPrice = product.cooking[0]?.price ? ( parseInt(product.price) + parseInt(product.cooking[0]?.price)) : parseInt(product.price);
-        this.cart.push({ ...product }); 
+        product.totalPrice = product.cooking[0]?.price ? (parseInt(product.price) + parseInt(product.cooking[0]?.price)) : parseInt(product.price);
+        const cookingTypeAddsPrice = product.cookingTypeAdds.reduce((acc: any, item: any) => {
+          return acc + parseInt(item.price)
+        },0)
+        product.totalPrice = product.totalPrice + cookingTypeAddsPrice
+        this.cart.push({ ...product });
       }
     },
     removeProduct(uuid: any) {

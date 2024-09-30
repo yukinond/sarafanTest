@@ -79,6 +79,15 @@ if (!pageData) {
   // Если данных нет, можно перенаправить на страницу 404
   // useRouter().push('/404');
 }
+
+const modalOpen = ref(false)
+const currentProduct = ref([]) as any
+
+function openProductModal(product:any) {
+  console.log('product' + product)
+  currentProduct.value = product
+  modalOpen.value = true
+}
 </script>
 
 <template>
@@ -164,8 +173,9 @@ if (!pageData) {
                 <p class="text-sm font-semibold text-red-600">
                   {{ buyout.price }} руб.
                 </p>
+                <!-- @click="menuStore.addToCart(buyout)" -->
                 <button
-                  @click="menuStore.addToCart(buyout)"
+                  @click="openProductModal(buyout)"
                   class="btn btn-primary btn-sm"
                 >
                   Добавить в корзину
@@ -220,6 +230,7 @@ if (!pageData) {
       </div>
     </div>
   </div>
+  <MenuProductModal :productData="currentProduct" :show="modalOpen" @close-modal="modalOpen = false" />
 </template>
 
 <style scoped></style>

@@ -45,6 +45,7 @@
     "mongodb": "^5.8.1",
     "mongoose": "^7.5.0",
     "next-auth": "^4.22.5",
+    "nodemailer": "^6.9.15",
     "nuxt-lazy-load": "^3.0.4",
     "nuxt-route-meta": "^3.0.10",
     "pinia-plugin-persistedstate": "^3.2.0",
