@@ -23,6 +23,7 @@ watch(
     isVisible.value = newVal
   }
 )
+
 </script>
 
 <template>

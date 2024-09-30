@@ -11,6 +11,7 @@ definePageMeta({
 
 const route = useRoute()
 const store = useMainStore()
+const { width } = useWindowSize()
 
 const pageName = computed(() => {
   const currentRoute = route.params
@@ -83,10 +84,13 @@ if (!pageData) {
 const modalOpen = ref(false)
 const currentProduct = ref([]) as any
 
-function openProductModal(product:any) {
-  console.log('product' + product)
-  currentProduct.value = product
-  modalOpen.value = true
+function openProductModal(product: any) {
+  if (width.value > 768) {
+    currentProduct.value = product
+    modalOpen.value = true
+  }else{
+    navigateTo(`/menu/${route.params.path}/${product.uuid}`)
+  }
 }
 </script>
 
@@ -137,10 +141,13 @@ function openProductModal(product:any) {
                 :to="`/menu/${route.params.path}/${buyout.uuid}`"
                 class="w-full h-full bg-cover bg-center absolute inset-0"
                 :style="{
-                  backgroundImage: `url(${buyout.image ? buyout.image : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYVjCv6r01QNNREAOWdrg1XtogAUnho3wTmtnubDkacSR7UlSWJWD7yAj5h4DU7NS9ecw&usqp=CAU'})`,
+                  backgroundImage: `url(${
+                    buyout.image
+                      ? buyout.image
+                      : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRYVjCv6r01QNNREAOWdrg1XtogAUnho3wTmtnubDkacSR7UlSWJWD7yAj5h4DU7NS9ecw&usqp=CAU'
+                  })`,
                 }"
               >
-              
               </NuxtLink>
               <NuxtLink
                 v-if="store.client.role == 'admin'"
@@ -230,7 +237,11 @@ function openProductModal(product:any) {
       </div>
     </div>
   </div>
-  <MenuProductModal :productData="currentProduct" :show="modalOpen" @close-modal="modalOpen = false" />
+  <MenuProductModal
+    :productData="currentProduct"
+    :show="modalOpen"
+    @close-modal="modalOpen = false"
+  />
 </template>
 
 <style scoped></style>
