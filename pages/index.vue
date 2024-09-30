@@ -37,31 +37,32 @@ function prevSlide() {
   <div class="flex flex-col gap-10 overflow-auto ">
     <!-- Слайдер -->
     <div class="carousel w-full overflow-hidden relative">
-      <div
-        :class="['carousel-item', { active: currentSlide === 1 }]"
-        class="relative w-full transition-all duration-500 ease-in-out"
-      >
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1625726411847-8cbb60cc71e6.webp"
-          class="w-full"
-        />
-      </div>
-      <div
-        :class="['carousel-item', { active: currentSlide === 2 }]"
-        class="relative w-full transition-all duration-500 ease-in-out"
-      >
-        <img
-          src="https://img.daisyui.com/images/stock/photo-1609621838510-5ad474b7d25d.webp"
-          class="w-full"
-        />
-      </div>
-      <div
-        class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
-      >
-        <a @click="prevSlide" class="btn btn-circle">❮</a>
-        <a @click="nextSlide" class="btn btn-circle">❯</a>
-      </div>
-    </div>
+  <div
+    :class="['carousel-item', { active: currentSlide === 1 }]"
+    class="relative w-full transition-all duration-500 ease-in-out"
+  >
+    <img
+      src="https://app.rikrtop.ru/api/images/get?path=51b9e71ba4dd504d33187f27d9e0ba92.png"
+      class="w-full max-h-[calc(60vh)] object-cover object-center"
+    />
+  </div>
+  <div
+    :class="['carousel-item', { active: currentSlide === 2 }]"
+    class="relative w-full transition-all duration-500 ease-in-out"
+  >
+    <img
+      src="https://app.rikrtop.ru/api/images/get?path=scale_1200.png"
+      class="w-full max-h-[calc(60vh)] object-cover object-center"
+    />
+  </div>
+  <div
+    class="absolute left-5 right-5 top-1/2 flex -translate-y-1/2 transform justify-between"
+  >
+    <a @click="prevSlide" class="btn btn-circle">❮</a>
+    <a @click="nextSlide" class="btn btn-circle">❯</a>
+  </div>
+</div>
+
     <!-- <div class="flex justify-center items-center mx-auto w-full bg-base-200">
       <div class="flex justify-between w-full md:w-1/2">
         <div class="flex flex-col items-center text-center p-4 gap-4 scale-90">
@@ -103,7 +104,7 @@ function prevSlide() {
       </div>
     </div> -->
     <div class="bg-base-200 p-10">
-      <h2 class="text-center text-2xl font-bold mb-6">Красный краб</h2>
+      <h2 class="text-center text-2xl font-bold mb-6">Ricktop</h2>
       <ul
         class="grid grid-cols-2 md:grid-cols-4 max-w-[70%] mx-auto justify-center flex-wrap"
       >
@@ -113,7 +114,7 @@ function prevSlide() {
           class="cursor-pointer p-2 border-b-2 border-transparent hover:border-primary text-center flex flex-col"
         >
           <nuxt-img
-            class="w-32 h-32 rounded-xl object-cover flex mx-auto"
+            class="w-44 h-44 rounded-xl object-cover flex mx-auto"
             :src="navbar.image"
             alt="settings"
           />

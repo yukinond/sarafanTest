@@ -85,7 +85,7 @@ function addToCart() {
   if (!cooking.value) {
     product.cooking.push({ name: 'Не выбрано', uuid: null })
   } else {
-    const selectedCooking = props.productData.value.cooking.find(
+    const selectedCooking = productData.value.cooking.find(
       (cookingItem: any) => cookingItem.uuid === cooking.value
     )
 
@@ -93,8 +93,13 @@ function addToCart() {
       product.cooking.push(selectedCooking)
     }
   }
+
+  product.cookingTypeAdds = cookingTypeAdds.value.filter(
+    (add: any) => add.checked
+  )
   menuStore.addToCart(product)
   cooking.value = ''
+  cookingTypeAdds.value.forEach((add: any) => (add.checked = false))
 }
 
 const showInfoWarningModal = ref(false)
@@ -124,6 +129,13 @@ watch(
     isVisible.value = newVal
   }
 )
+const cookingTypeAdds = ref([
+  { title: 'Лимон 60гр', value: 'lemon', price: 30, checked: false },
+  { title: 'Яблоко зеленое 60гр', value: 'apple', price: 30, checked: false },
+  { title: 'Перец чили 5гр', value: 'pepper', price: 30, checked: false },
+  { title: 'Паприка 10гр', value: 'paprika', price: 30, checked: false },
+  { title: 'Чеснок 60гр', value: 'chicken', price: 30, checked: false },
+]) as any
 </script>
 
 <template>
@@ -148,7 +160,7 @@ watch(
           @click.stop
         >
           <div
-            class="flex flex-col md:flex-row w-full max-w-4xl px-6 md:px-8 gap-6 bg-white rounded-xl shadow-2xl py-6 md:py-8"
+            class="flex flex-col md:flex-row w-full max-w-4xl px-6 md:px-8 gap-6 bg-white rounded-xl shadow-2xl py-3 md:py-4"
           >
             <div
               v-if="props.productData && props.productData.image"
@@ -157,7 +169,7 @@ watch(
               <img
                 :src="props.productData.image"
                 alt="Изображение продукта"
-                class="w-full h-full object-cover rounded-xl transition-transform transform"
+                class="w-full h-full max-h-52 object-cover rounded-xl transition-transform transform"
               />
             </div>
 
@@ -205,7 +217,7 @@ watch(
             </div>
           </div>
           <div
-            class="w-full max-w-4xl px-6 md:px-8 py-6 bg-white rounded-xl shadow-2xl mt-6"
+            class="w-full max-w-4xl px-6 md:px-8 py-6  pt-0 bg-white rounded-xl "
           >
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div
@@ -221,7 +233,7 @@ watch(
                   Варка
                 </h3>
                 <div
-                  class="flex flex-col space-y-6 w-full px-2 max-h-80 overflow-y-auto"
+                  class="flex flex-col space-y-6 w-full px-2 max-h-52 overflow-y-auto"
                 >
                   <div
                     v-for="cookingItem in props.productData.cooking.filter(
@@ -270,7 +282,7 @@ watch(
                   Жарка
                 </h3>
                 <div
-                  class="flex flex-col space-y-6 w-full px-2 max-h-80 overflow-y-auto"
+                  class="flex flex-col space-y-6 w-full px-2 max-h-52 overflow-y-auto"
                 >
                   <div
                     v-for="cookingItem in props.productData.cooking.filter(
@@ -305,9 +317,32 @@ watch(
                   </div>
                 </div>
               </div>
+              <div>
+                <h3 class="font-semibold my-2">Выбор добавок</h3>
+                <div class="flex flex-col gap-2">
+                  <div
+                    v-for="add in cookingTypeAdds"
+                    :key="add.value"
+                    class="form-control"
+                  >
+                    <label class="cursor-pointer flex items-center">
+                      <input
+                        :checked="add.checked"
+                        type="checkbox"
+                        :id="add.value"
+                        v-model="add.checked"
+                        class="checkbox checkbox-primary"
+                      />
+                      <span class="ml-2"
+                        >{{ add.title }} - {{ add.price }}₽</span
+                      >
+                    </label>
+                  </div>
+                </div>
+              </div>
             </div>
             <div
-              class="w-full border border-red-600 border-x-0 text-gray-800 p-6 text-center mt-6"
+              class="w-full border border-red-600 border-x-0 text-gray-800 p-6 text-center mt-6 text-xs"
             >
               Мы специализируемся на продаже, приготовлении и доставке
               морепродуктов по городу Казань. Мы не готовим заранее, что
