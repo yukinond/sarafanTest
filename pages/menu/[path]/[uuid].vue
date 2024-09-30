@@ -119,8 +119,11 @@ function addToCart() {
       product.cooking.push(selectedCooking)
     }
   }
+
+  product.cookingTypeAdds = cookingTypeAdds.value.filter((add:any) => add.checked)
   menuStore.addToCart(product)
   cooking.value = ''
+  cookingTypeAdds.value.forEach((add: any) => (add.checked = false))
 }
 
 const showInfoWarningModal = ref(false)
@@ -133,7 +136,17 @@ function confirmWarning() {
   modalOpen.value = false
 }
 
+const cookingTypeAdds = ref([
+  { title: 'Лимон 60гр', value: 'lemon', price: 30, checked: false },
+  { title: 'Яблоко зеленое 60гр', value: 'apple', price: 30, checked: false },
+  { title: 'Перец чили 5гр', value: 'pepper', price: 30, checked: false },
+  { title: 'Паприка 10гр', value: 'paprika', price: 30, checked: false },
+  { title: 'Чеснок 60гр', value: 'chicken', price: 30, checked: false },
+]) as any
 
+function handleAddCheckboxChange(add: any) {
+  add.checked = !add.checked
+}
 </script>
 
 <template>
@@ -242,33 +255,39 @@ function confirmWarning() {
               Варка
             </h3>
             <div
-              v-for="cookingItem in productData.cooking.filter(
-                (c) => c.type === 'Варка'
-              )"
-              :key="cookingItem.uuid"
-              class="bg-gray-100 p-4 rounded-xl shadow-lg transition-transform transform hover:scale-105"
+              class="flex flex-col space-y-6 w-full px-2 max-h-80 overflow-y-auto"
             >
-              <label class="flex items-start justify-center flex-col space-x-3">
-                <div class="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    :value="cookingItem.uuid"
-                    :checked="checked(cookingItem.uuid)"
-                    @click="
-                      (event) =>
-                        toggleCooking(cookingItem.uuid, cookingItem.type)
-                    "
-                    class="form-checkbox ml-2 h-5 w-5 text-red-600"
-                  />
-                  <div class="ml-2 text-lg font-semibold text-gray-800">
-                    {{ cookingItem.name }}
+              <div
+                v-for="cookingItem in productData.cooking.filter(
+                  (c) => c.type === 'Варка'
+                )"
+                :key="cookingItem.uuid"
+                class="bg-gray-100 p-4 rounded-xl shadow-lg transition-transform transform hover:scale-105"
+              >
+                <label
+                  class="flex items-start justify-center flex-col space-x-3"
+                >
+                  <div class="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      :value="cookingItem.uuid"
+                      :checked="checked(cookingItem.uuid)"
+                      @click="
+                        (event) =>
+                          toggleCooking(cookingItem.uuid, cookingItem.type)
+                      "
+                      class="form-checkbox ml-2 h-5 w-5 text-red-600"
+                    />
+                    <div class="ml-2 text-lg font-semibold text-gray-800">
+                      {{ cookingItem.name }}
+                    </div>
                   </div>
-                </div>
-                <p class="text-gray-600">{{ cookingItem.composition }}</p>
-                <p class="text-gray-800 font-bold">
-                  Цена: {{ cookingItem.price }} руб.
-                </p>
-              </label>
+                  <p class="text-gray-600">{{ cookingItem.composition }}</p>
+                  <p class="text-gray-800 font-bold">
+                    Цена: {{ cookingItem.price }} руб.
+                  </p>
+                </label>
+              </div>
             </div>
           </div>
 
@@ -282,37 +301,66 @@ function confirmWarning() {
               Жарка
             </h3>
             <div
-              v-for="cookingItem in productData.cooking.filter(
-                (c) => c.type === 'Жарка'
-              )"
-              :key="cookingItem.uuid"
-              class="bg-gray-100 p-4 rounded-xl shadow-lg transition-transform transform hover:scale-105"
+              class="flex flex-col space-y-6 w-full px-2 max-h-80 overflow-y-auto"
             >
-              <label class="flex items-start justify-center flex-col space-x-3">
-                <div class="flex items-center space-x-3">
-                  <input
-                    type="checkbox"
-                    :value="cookingItem.uuid"
-                    :checked="checked(cookingItem.uuid)"
-                    @click="
-                      (event) =>
-                        toggleCooking(cookingItem.uuid, cookingItem.type)
-                    "
-                    class="form-checkbox ml-2 h-5 w-5 text-red-600"
-                  />
-                  <div class="ml-2 text-lg font-semibold text-gray-800">
-                    {{ cookingItem.name }}
+              <div
+                v-for="cookingItem in productData.cooking.filter(
+                  (c) => c.type === 'Жарка'
+                )"
+                :key="cookingItem.uuid"
+                class="bg-gray-100 p-4 rounded-xl shadow-lg transition-transform transform hover:scale-105"
+              >
+                <label
+                  class="flex items-start justify-center flex-col space-x-3"
+                >
+                  <div class="flex items-center space-x-3">
+                    <input
+                      type="checkbox"
+                      :value="cookingItem.uuid"
+                      :checked="checked(cookingItem.uuid)"
+                      @click="
+                        (event) =>
+                          toggleCooking(cookingItem.uuid, cookingItem.type)
+                      "
+                      class="form-checkbox ml-2 h-5 w-5 text-red-600"
+                    />
+                    <div class="ml-2 text-lg font-semibold text-gray-800">
+                      {{ cookingItem.name }}
+                    </div>
                   </div>
-                </div>
-                <p class="text-gray-600">{{ cookingItem.composition }}</p>
-                <p class="text-gray-800 font-bold">
-                  Цена: {{ cookingItem.price }} руб.
-                </p>
-              </label>
+                  <p class="text-gray-600">{{ cookingItem.composition }}</p>
+                  <p class="text-gray-800 font-bold">
+                    Цена: {{ cookingItem.price }} руб.
+                  </p>
+                </label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <h3 class="font-semibold my-2">Выбор добавок</h3>
+            <div class="flex flex-col gap-2">
+              <div
+                v-for="add in cookingTypeAdds"
+                :key="add.value"
+                class="form-control"
+              >
+                <label class="cursor-pointer flex items-center">
+                  <input
+                   :checked="add.checked"
+                    type="checkbox"
+                    :id="add.value"
+                    v-model="add.checked"
+                    class="checkbox checkbox-primary"
+                  />
+                  <span class="ml-2">{{ add.title }} - {{ add.price }}₽</span>
+                </label>
+              </div>
             </div>
           </div>
         </div>
-        <div class="w-full  border border-red-600 border-x-0 text-gray-800 p-6 text-center mt-6">
+        <div
+          class="w-full border border-red-600 border-x-0 text-gray-800 p-6 text-center mt-6"
+        >
           Мы специализируемся на продаже, приготовлении и доставке морепродуктов
           по городу Казань. Мы не готовим заранее, что гарантирует получение
           вами блюда свежим и теплым. Готовим на открытой кухне на ваших глазах!

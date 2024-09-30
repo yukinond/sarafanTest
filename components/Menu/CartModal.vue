@@ -72,6 +72,15 @@ watch(
                   <div v-else class="text-sm text-gray-600 mt-2">
                     Без выбранных способов приготовления
                   </div>
+                  <div v-if="product.cookingTypeAdds.length" class="text-xs  flex flex-col">
+                    <span class="font-medium">Добавки:</span> 
+                    <div
+                      v-for="addon in product.cookingTypeAdds"
+                      class="ml-2 text-gray-600"
+                    >
+                      {{ addon.title }} - {{ addon.price }} руб.
+                    </div>
+                  </div>
                 </div>
                 <div class="flex flex-col items-end space-y-2">
                   <button

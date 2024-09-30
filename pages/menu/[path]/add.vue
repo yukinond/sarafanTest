@@ -276,6 +276,7 @@ async function uploadToS3(event: Event) {
   }
   return true
 }
+
 </script>
 
 <template>

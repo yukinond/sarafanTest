@@ -130,8 +130,28 @@ async function update() {
   updateInitital()
 }
 
+async function deleteToken(uuid: string) {
+  //@ts-ignore
+  const { data, error }: any = await useFetch('/api/token/deleteToken')
+}
+
+async function reloginCycle() {
+  const { data, error }: any = await useFetch('/api/token/reLoginCycle', {
+    method: 'GET',
+  })
+  if (data.value) {
+    if (data.value.status == 'logined') {
+      return 'logined'
+    } else {
+      return 'ol'
+    }
+  }
+}
+
+const { signOut, status } = useAuth()
+
 async function logout() {
-  await deleteToken(storeMain.client.uuid)
+  await deleteToken(store.client.uuid)
   const loginStatus = await reloginCycle()
 
   if (loginStatus !== 'logined') {
@@ -142,7 +162,7 @@ async function logout() {
     location.reload()
   }
 
-  storeMain.setClient()
+  store.setClient()
 }
 
 const orders = ref([])
