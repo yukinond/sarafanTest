@@ -10,7 +10,7 @@ export const navbarDataList: any[] = [
     { path: "/authors", title: "Авторские деликатесы", image: "https://images.unsplash.com/photo-1511690656952-34342bb7c2f2?q=80&w=1964&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
     { path: "/seasonings", title: "Приправы", image: "https://images.unsplash.com/photo-1543376798-286a59d5da12?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8c2Vhc29uaW5nc3xlbnwwfHwwfHx8MA%3D%3D" },
     { path: "/ready ", title: "Готовые блюда ", image: "https://media.istockphoto.com/id/1208254890/photo/roast-chicken-wings-with-lettuce-boiled-beans-zucchini-and-eggplants-rustic-background.webp?a=1&b=1&s=612x612&w=0&k=20&c=P1VujZggpNBw4nLF1LFJ4xmcDAs5rztimR2vROY3OU4=" },
-    { path: "/ready ", title: "Тара", image: "https://avatars.mds.yandex.net/i?id=2e333f4faf85fe8e3623be50f9257a133a968aee-12493262-images-thumbs&n=13" },
+    { path: "/tara ", title: "Тара", image: "https://avatars.mds.yandex.net/i?id=2e333f4faf85fe8e3623be50f9257a133a968aee-12493262-images-thumbs&n=13" },
 
 ]
 
