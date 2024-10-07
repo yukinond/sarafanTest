@@ -4,7 +4,7 @@ const config = useRuntimeConfig()
 const { smtpHost, smtpPort, smtpUser, smtpPass, privateKey } = config
 const alias = smtpUser
 const dkimKey = `-----BEGIN PRIVATE KEY-----
-MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQChf8ef6j1jSFf2SW9BeOfupbROnSWglCbnhyhZmOIrKFAPHaTNwnXP6VKJ4vwpMG/KJrzt44qs2/PepOt99xDU4prAMV8JfqWUzXxFQH1uq+Mlg4O2bHN7eINh7JgbL8fEsv5VRswPGhNHzHn3zJ3ndEu07QPf+kL2lPwpqXqLzwIDAQAB
+WgfPvmg8zCmyP5NHwe5M
 -----END PRIVATE KEY-----`
 class MailService {
   transporter: nodemailer.Transporter

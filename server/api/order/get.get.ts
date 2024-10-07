@@ -6,7 +6,7 @@ export default eventHandler(async (event) => {
   if (!user) return sendRedirect(event, '/auth', 302);
 
   const body = getQuery(event);
-  const { status, searchQuery, userUuid } = body;
+  const { status, searchQuery, userUuid, reviewed } = body;
 
   const params = searchQuery
     ? {
@@ -23,6 +23,9 @@ export default eventHandler(async (event) => {
 
   if (userUuid) {
     params.user = userUuid;
+  }
+  if(reviewed){
+    params.reviewed = reviewed ? { $ne: true } : null;
   }
 
   const data = await Order.find(params).sort({ _id: -1 });

@@ -12,9 +12,11 @@ const order = reactive({
   name: '',
   phone: '',
   email: '',
-  address: '',  
+  address: '',
   pickup: true,
-  comment: '', 
+  comment: '',
+  readyDate: '',
+  readyTime: '',
 })
 
 const total = computed(() => {
@@ -25,7 +27,7 @@ const submitOrder = () => {
   try {
     const { data, error } = useFetch('/api/order/create', {
       method: 'POST',
-      body: {order, cart: menuStore.cart},
+      body: { order, cart: menuStore.cart },
     })
     if (data.value) {
       menuStore.clearCart()
@@ -41,10 +43,15 @@ const submitOrder = () => {
 }
 
 const showDelivery = ref(false)
+const startDate = ref(new Date(Date.now() + 1000 * 60 * 5))
+function setDeliveryDate(date: string, time: string) {
+  order.readyDate = date
+  order.readyTime = time
+}
 </script>
 
 <template>
-  <div class="max-w-4xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
+  <div class="max-w-5xl mx-auto p-6 flex flex-col lg:flex-row gap-6">
     <!-- Левая часть - форма заказа -->
     <form @submit.prevent="submitOrder" class="flex-1 space-y-6">
       <!-- Информация о покупателе -->
@@ -59,7 +66,9 @@ const showDelivery = ref(false)
 
         <div class="flex flex-col md:flex-row md:gap-6">
           <div class="flex-1">
-            <label for="name" class="block text-gray-700 font-medium">Имя</label>
+            <label for="name" class="block text-gray-700 font-medium"
+              >Имя</label
+            >
             <input
               type="text"
               id="name"
@@ -70,7 +79,9 @@ const showDelivery = ref(false)
             />
           </div>
           <div class="flex-1">
-            <label for="phone" class="block text-gray-700 font-medium">Телефон</label>
+            <label for="phone" class="block text-gray-700 font-medium"
+              >Телефон</label
+            >
             <input
               v-model="order.phone"
               type="text"
@@ -83,7 +94,9 @@ const showDelivery = ref(false)
         </div>
 
         <div>
-          <label for="email" class="block text-gray-700 font-medium">Email</label>
+          <label for="email" class="block text-gray-700 font-medium"
+            >Email</label
+          >
           <input
             type="email"
             id="email"
@@ -96,7 +109,9 @@ const showDelivery = ref(false)
 
         <div>
           <div class="flex gap-3 flex-wrap">
-            <span class="block text-gray-700 font-medium">Выберите метод получения:</span>
+            <span class="block text-gray-700 font-medium"
+              >Выберите метод получения:</span
+            >
             <Button
               @click="order.pickup = true"
               class="btn btn-sm btn-primary hover:bg-transparent hover:text-base-content"
@@ -111,8 +126,10 @@ const showDelivery = ref(false)
             </Button>
           </div>
           <div v-if="!order.pickup">
-            <label for="address" class="block text-gray-700 font-medium">Адрес</label>
-            <YandexMap :state="showDelivery"/>
+            <label for="address" class="block text-gray-700 font-medium"
+              >Адрес</label
+            >
+            <YandexMap :state="showDelivery" />
             <input
               type="text"
               id="address"
@@ -123,8 +140,20 @@ const showDelivery = ref(false)
             />
           </div>
           <div v-else class="my-2">
-            Для получения заказа прибудьте по адресу г.Казань ул Меридианная 10а.
+            Для получения заказа прибудьте по адресу г.Казань ул Меридианная
+            10а.
           </div>
+        </div>
+
+        <div class="flex">
+          <label for="email" class="block text-gray-700 font-medium w-full"
+            >Примерная дата получения/забора заказа:</label
+          >
+          <DatePicker
+            :model-value="startDate"
+            @save-date="setDeliveryDate"
+            :time-delivery="order.readyTime"
+          />
         </div>
       </div>
 

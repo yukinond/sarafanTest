@@ -152,15 +152,11 @@ const { signOut, status } = useAuth()
 
 async function logout() {
   await deleteToken(store.client.uuid)
-  const loginStatus = await reloginCycle()
+  // const loginStatus = await reloginCycle()
 
-  if (loginStatus !== 'logined') {
-    await signOut({
-      callbackUrl: '/auth',
-    })
-  } else {
-    location.reload()
-  }
+  await signOut({
+    callbackUrl: '/auth',
+  })
 
   store.setClient()
 }
