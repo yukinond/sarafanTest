@@ -195,6 +195,9 @@ watch(isDrawerOpen, (newValue) => {
                 <li>
                   <NuxtLink to="/contacts" class="px-1.5">Контакты</NuxtLink>
                 </li>
+                <li>
+                  <NuxtLink to="/reviews" class="px-1.5">Отзывы</NuxtLink>
+                </li>
                 <li><a class="px-1.5">Доставка</a></li>
                 <li v-if="store.client.role === 'admin'">
                   <NuxtLink to="/orders">Заказы</NuxtLink>

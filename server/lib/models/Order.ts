@@ -14,6 +14,9 @@ const OrderSchema = new Schema({
   products: { type: Array, required: true },
   status: { type: String, required: true, default: 'created' },
   comment: { type: String, required: true, default: 'Нет.' },
+  reviewed: { type: Boolean, default: false },
+  readyTime: { type: String, required: true },
+  readyDate: { type: String, required: true },
   updatedDate: { type: Date, default: null },
 })
 
